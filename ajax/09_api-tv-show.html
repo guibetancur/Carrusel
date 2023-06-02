@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador Shows de TV</title>
+  <style>
+    .grid-fluid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .loader {
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Buscador Shows de TV</h1>
+  <input type="search" id="search" placeholder="Buscar shows de tv..." autocomplete="off">
+  <section id="shows" class="grid-fluid"></section>
+  <template id="show-template">
+    <article class="show">
+      <h3></h3>
+      <div></div>
+      <img>
+      <a></a>
+    </article>
+  </template>
+  <script>
+    /* ********** Curso JavaScript: 136. Ejercicios AJAX - APIs: Buscador de Shows con Fetch y TVMAZE API - #jonmircha ********** */
+    const d = document,
+    $shows = d.getElementById('shows'),
+    $template = d.getElementById('show-template').content,
+    $fragment = d.createDocumentFragment()
+
+    d.addEventListener('keypress', async e => {
+      if (e.target.matches('#search')) {
+        if (e.key === 'Enter') {
+          try {
+            $shows.innerHTML = `<img class='loader' src='./assets/loader.svg' alt='Cargando...'>`
+            let query = e.target.value.toLowerCase(),
+            api = `http://api.tvmaze.com/search/shows?q=${query}`,
+            res = 
+          } catch (err) {
+            
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
+<!-- En este video te enseño a crear una buscador de shows de TV con la #API de #TVMAZE y el API #Fetch de #JavaScript con funciones asíncronas (#AsyncAwait).
+
+Aquí los enlaces mencionados en el video:
+
+🟡 http://www.tvmaze.com/
+🟡 http://api.tvmaze.com/
+🟡 https://lyricsovh.docs.apiary.io/
+🟡 https://theaudiodb.com/
+
+💛 Aprende JavaScript https://aprendejavascript.org/
+📖 Mis notas sobre JavaScript https://jonmircha.com/javascript
+📖 Mis notas sobre ECMAScript https://jonmircha.com/ecmascript
+📖 Mis notas sobre JavaScript Asíncrono https://jonmircha.com/javascript-asin...
+📖 Mis notas sobre JSON https://jonmircha.com/json
+📖 Mis notas sobre el DOM https://jonmircha.com/dom
+📖 Mis notas sobre AJAX https://jonmircha.com/ajax
+📖 Mis notas sobre API REST https://jonmircha.com/api-rest
+📦 Códigos: https://github.com/jonmircha/youtube-js -->
+

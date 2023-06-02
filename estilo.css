@@ -1,0 +1,37 @@
+.imagen {
+  max-width: 99%;
+  max-height: 99%;
+}
+
+.image-slider {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: 600px;
+  align-content: center;
+  align-items: center;
+  background-color: black;
+  position: relative;
+}
+
+.button-slider {
+  color: gray;
+  position: absolute;
+  height: 100%;
+  border: none;
+  width: 10%;
+  background-color: transparent;
+  font-size: 60px;
+}
+
+.button-slider:hover {
+  color: rgba(255, 255, 255, 0.5)
+}
+
+#izq {
+  left: 0;
+}
+
+#der {
+  right: 0;
+}
