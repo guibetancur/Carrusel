@@ -25,6 +25,7 @@
       margin: auto;
     }
 
+    /* para que detecte los saltos de línea de la letra de la canción */
     .song blockquote {
       white-space: pre-wrap;
     }
@@ -51,15 +52,92 @@
     <br>
     <input type="submit">
   </form>
-  <img class="loader" src="../assets/loader.svg" alt="Cargando...">
+  <img class="loader" src="./assets/loader.svg" alt="Cargando...">
   <aside class="error"></aside>
   <main>
     <article class="artist"></article>
     <article class="song"></article>
   </main>
   <script>
-    /* ********** Curso JavaScript: 137. Ejercicios AJAX - APIs: Buscador de Canciones con Fetch + Async - #jonmircha ********** */
+    /* ********** JavaScript: 137. Ejercicios AJAX - APIs: Buscador de Canciones con Fetch + Async -********** */
+    const d = document,
+      $form = d.getElementById('song-search'),
+      $loader = d.querySelector('.loader'),
+      $error = d.querySelector('.error'),
+      $main = d.querySelector('main'),
+      $artist = d.querySelector('.artist'),
+      $song = d.querySelector('.song')
+
+    $form.addEventListener('submit', async e => {
+      e.preventDefault()
+      debugger
+      try {
+        $loader.style.display = 'block'
+
+        let artist = e.target.artist.value.toLowerCase(),
+          song = e.target.song.value.toLowerCase(),
+          $artistTemplate = '',
+          $songTemplate = '',
+          artistAPI = `https://www.theaudiodb.com/api/v1/json/2/search.php?s=${artist}`,
+          songAPI =`https://api.lyrics.ovh/v1/${artist}/${song}`,
+          artistFetch = fetch(artistAPI),
+          songFetch = fetch(songAPI),
+          [artistRes, songRes] = await Promise.all([artistFetch, songFetch]),
+          artistData = await artistRes.json(),
+          songData = await songRes.json()
+
+          console.log(artistData, songData)
+          if (artistData.artists === null) {
+            $artistTemplate = `<h2>No existe el intérprete <mark>${artist}</mark></h2>`
+          } else {
+            let artist = artistData.artists[0]
+            $artistTemplate = `
+              <h2>${artist.strArtist}</h2>
+              <img src='${artist.strArtistThumb}' alt='${artist.strArtist}'>
+              <p>${artist.intBornYear} - ${artist.intDiedYear || 'Present'}</p>
+              <p>${artist.strCountry}</p>
+              <p>${artist.strGenre} - ${artist.strStyle}</p>
+              <a href='://${artist.Website}' target='_blank'>Sitio Web</a>
+              <p>${artist.strBiographyEN}</p>
+              `
+          }
+
+          if (songData.error) {
+            $songTemplate = `<h2>No existe la canción <mark>${song}</mark></h2>`
+          } else {
+            $songTemplate = `
+              <h2>${song.toUpperCase}</h2>
+              <blockquote>${songData.lyrics}</blockquote>
+            `
+          }
+
+          $loader.style.display='none'
+          $artist.innerHTML = $artistTemplate
+          $song.innerHTML = $songTemplate
+
+      } catch (err) {
+        let message = err.statusText || 'Ocurrió un error inesperado'
+        $error.innerHTML = `<p>Error ${err.status}: ${message}</p>`
+        $loader.style.display = 'none'
+
+      }
+
+    })
   </script>
 </body>
 
 </html>
+<!-- 
+🟡 https://lyricsovh.docs.apiary.io/
+🟡 https://theaudiodb.com/
+🟡 https://api-sepomex.hckdrk.mx/documen...
+
+💛 Aprende JavaScript https://aprendejavascript.org/
+📖 Mis notas sobre JavaScript https://jonmircha.com/javascript
+📖 Mis notas sobre ECMAScript https://jonmircha.com/ecmascript
+📖 Mis notas sobre JavaScript Asíncrono https://jonmircha.com/javascript-asin...
+📖 Mis notas sobre JSON https://jonmircha.com/json
+📖 Mis notas sobre el DOM https://jonmircha.com/dom
+📖 Mis notas sobre AJAX https://jonmircha.com/ajax
+📖 Mis notas sobre API REST https://jonmircha.com/api-rest
+📦 Códigos: https://github.com/jonmircha/youtube-js -->
