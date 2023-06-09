@@ -33,11 +33,12 @@
   */
     const d = document,
       $selectPrimary = d.getElementById('select-primary'),
-      $selectSecondary = d.getElementById('select-secondary')
+      $selectSecondary = d.getElementById('select-secondary'),
+      $selectThird = d.getElementById('select-third')
 
     function loadStates() {
       // debugger
-      fetch('https://api-sepomex.hckdrk.mx/query/get_estados')
+      fetch('https://api-copomex.hckdrk.mx/query/get_estados')
         // fetch('https://api-sepomex.hckdrk.mx/query/get_estados', {
         // method: 'GET',
         // body: new FormData(e.target),
@@ -45,7 +46,9 @@
         // })
         .then(res => res.ok ? res.json() : Promise.reject(res))
         .then(json => {
-          console.log(json)
+          let $options = `<option value=''>Elige un Estado</option>`
+          json.response.estado.array.forEach(el => $options += `<option value='${el}'>${el}</option>`)
+          $selectPrimary.innerHTML = $options
         })
         .catch(err => {
           let message = err.statusText || 'Ocurrió un error inesperado'
@@ -53,10 +56,36 @@
         })
       }
       function loadTowns(state) {
+        fetch(`https://api-copomex.hckdrk.mx/query/get_municipio_por_estado/${state}`)
+        .then(res => res.ok ? res.json() : Promise.reject(res))
+        .then(json => {
+          let $options = `<option value=''>Elige un Municipio</option>`
+          json.response.municipios.array.forEach(el => $options += `<option value='${el}'>${el}</option>`)
+          $selectSecondary.innerHTML = $options
+        })
+        .catch(err => {
+          let message = err.statusText || 'Ocurrió un error inesperado'
+          $selectSecondary.nextElementSibling.innerHTML = `Error ${err.status}: ${message}`
+        })
+      }
+      function loadSuburbs(suburb) {
+        fetch(`https://api-copomex.hckdrk.mx/query/get_colonia_por_municipio/${suburb}`)
+        .then(res => res.ok ? res.json() : Promise.reject(res))
+        .then(json => {
+          let $options = `<option value=''>Elige una Colonia</option>`
+          json.response.colonia.array.forEach(el => $options += `<option value='${el}'>${el}</option>`)
+          $selectThird.innerHTML = $options
+        })
+        .catch(err => {
+          let message = err.statusText || 'Ocurrió un error inesperado'
+          $selectSecondary.nextElementSibling.innerHTML = `Error ${err.status}: ${message}`
+        })
       }
       d.addEventListener('DOMContentLoaded', loadStates)
       
       $selectPrimary.addEventListener('change', e => loadTowns(e.target.values))
+      $selectSecondary.addEventListener('change', e => loadSuburbs(e.target.values))
+
       </script>
 </body>
 
