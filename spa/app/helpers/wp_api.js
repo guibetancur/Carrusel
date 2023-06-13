@@ -9,6 +9,4 @@ const NAME = 'css-tricks',
   CATEGORIES = `${API_WP}/categories`,
   SEARCH = `${API_WP}/search?_embed&search=`
 
-  export default function api() {
-    NAME, DOMAIN, SITE, API_WP, POSTS, POST, CATEGORIES, SEARCH
-  }
+  export default {NAME, DOMAIN, SITE, API_WP, POSTS, POST, CATEGORIES, SEARCH}

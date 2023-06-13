@@ -1,6 +1,10 @@
-import api from './helpers/wp_api.js'
-import {ajax} from './helpers/ajax.js'
-import {Title} from './components/Title.js'
+// import api from './helpers/wp_api.js'
+// import {ajax} from './helpers/ajax.js'
+import {Header} from './components/Header.js'
+import { Main } from './components/Main.js'
+import {Loader} from './components/Loader.js'
+// import { PostCard } from './components/PostCard.js'
+import { Router } from './components/Router.js'
 
 // export default function App() {
 //   document.getElementById('root').innerHTML = '<h1>Welcome to Vanilla JS</h1>'
@@ -17,9 +21,13 @@ import {Title} from './components/Title.js'
 // }
 
 export function App() {
-  const d = document, 
-    $root = d.getElementById('root')
+    const $root = document.getElementById('root')
 
-    $root.appendChild(Title())
+    $root.innerHTML = null // Para que no repita las cabeceras
+    $root.appendChild(Header())
+    $root.appendChild(Main())
+    $root.appendChild(Loader())
+
+    Router()
 }
 
