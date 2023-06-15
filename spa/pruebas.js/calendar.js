@@ -6,7 +6,6 @@ function kalEl(settings = {}) {
     const year = date.getFullYear();
     const numOfDays = new Date(year, month + 1, 0).getDate();
     const renderToday = (year === config.today.year) && (month === config.today.month);
-
     return `<kal-el data-firstday="${config.info.firstDay}">
       <time datetime="${year}-${(pad(month))}">${new Intl.DateTimeFormat(locale, { month: 'long'}).format(date)} <i>${year}</i></time>
       <ul>${weekdays(config.info.firstDay,locale).map(name => `<li><abbr title="${name.long}">${name.short}</abbr></li>`).join('')}</ul>
@@ -22,7 +21,8 @@ function kalEl(settings = {}) {
       </ol>
     </kal-el>`;
   }
-
+  
+  // const weekdays = (firstDay, locale) => {
   const weekdays = (firstDay, locale) => {
     const date = new Date(0);
     const arr = [...Array(7).keys()].map(i => {
@@ -32,6 +32,7 @@ function kalEl(settings = {}) {
           short: new Intl.DateTimeFormat([locale], { weekday: 'short'}).format(date)
         }
     })
+    firstDay=3 // Guillermo Betancur Para que el primer día sea domingo
     for (let i = 0; i < 8 - firstDay; i++) arr.splice(0, 0, arr.pop());
     return arr;
   }
@@ -39,14 +40,15 @@ function kalEl(settings = {}) {
   const today = new Date();
   const config = Object.assign({ locale: (document.documentElement.getAttribute('lang') || 'en-US'), today: { day: today.getDate(), month: today.getMonth(), year: today.getFullYear() } }, settings);
   const date = config.date ? new Date(config.date) : today;
-  if (!config.info) config.info = new Intl.Locale(config.locale).weekInfo || { firstDay: 7, weekend: [6, 7] };
+  if (!config.info) config.info = new Intl.Locale(config.locale).weekInfo || { firstDay: 6, weekend: [6, 7] };
   return config.year ? [...Array(12).keys()].map(i => render(new Date(date.getFullYear(), i, date.getDate()), config.locale, date.getMonth())).join('') : render(date, config.locale)
 }
 
 function getWeek(cur) {
   const date = new Date(cur.getTime());
   date.setHours(0, 0, 0, 0);
-  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  // date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7); // GB Cambio para que inicie bien el número de semana
+  date.setDate(date.getDate() + 3 - (date.getDay() + 7) % 7);
   const week = new Date(date.getFullYear(), 0, 4);
   return 1 + Math.round(((date.getTime() - week.getTime()) / 86400000 - 3 + (week.getDay() + 6) % 7) / 7);
 }
@@ -57,3 +59,12 @@ lang.addEventListener('change', () => {
   document.documentElement.lang = lang.value;
   app.innerHTML = kalEl(app.dataset)
 });
+
+// Guillermo Betancur
+
+document.addEventListener('click', e => {
+  if (e.target.matches('time')) {
+    debugger
+    let cita = confirm(`Desea hacer una cita para el ${e.target.dateTime}?`)
+  }
+})

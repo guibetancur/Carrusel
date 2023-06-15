@@ -5,6 +5,7 @@ import { Main } from './components/Main.js'
 import {Loader} from './components/Loader.js'
 // import { PostCard } from './components/PostCard.js'
 import { Router } from './components/Router.js'
+import { infinite_scroll } from './helpers/infinite_scroll.js'
 
 // export default function App() {
 //   document.getElementById('root').innerHTML = '<h1>Welcome to Vanilla JS</h1>'
@@ -29,5 +30,6 @@ export function App() {
     $root.appendChild(Loader())
 
     Router()
+    infinite_scroll()
 }
 

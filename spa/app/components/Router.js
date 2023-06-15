@@ -2,6 +2,8 @@ import api from '../helpers/wp_api.js'
 import { ajax } from '../helpers/ajax.js'
 import { PostCard } from './PostCard.js'
 import { Post } from './Post.js'
+import { SearchCard } from './SearchCard.js'
+import { ContactForm } from './ContactForm.js'
 
 export async function Router() {
   const d = document,
@@ -20,15 +22,29 @@ export async function Router() {
       }
     })  
   } else if (hash.includes('#/search')) {
-		$main.innerHTML = `<h2>Sección del Buscador</h2>`
+    let query = localStorage.getItem('wpSearch')
+    if (!query) {
+      d.querySelector('.loader').style.display = 'none'
+      return false
+    }
+    await ajax({
+      url: `${api.SEARCH}${query}`,
+      cbSuccess: (search) => {
+        let html = ''
+        if (search.length ===0) html = `<p class='error'>No hay resultados para <mark>${query}</mark></p>`
+         else search.forEach(post => html += SearchCard(post))
+        $main.innerHTML = html
+      }
+    })
+
   } else if (hash === '#/contacto') {
-		$main.innerHTML = `<h2>Sección del Contacto</h2>`
+    $main.appendChild(ContactForm())
   } else {
 		$main.innerHTML = `<h2>Contenido del post seleccionado</h2>`
 		await ajax({
       url: `${api.POST}/${localStorage.getItem('wpPostId')}`,
       cbSuccess: (post) => {
-				console.log(post)
+				//console.log(post)
         $main.innerHTML = Post(post)
       }
     })
@@ -37,5 +53,3 @@ export async function Router() {
 	d.querySelector('.loader').style.display = 'none'
 
 }
-
-
