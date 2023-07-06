@@ -76,7 +76,7 @@ function makeMove(row, col) {
     console.log("Invalid move. The game is over.");
     return;
   }
-    // Make the move
+  // Make the move
   board[row][col] = currentPlayer;
   // Display the board
   displayBoard();
@@ -105,4 +105,4 @@ function makeMove(row, col) {
 // Start the game
 console.log("Welcome to tic tac toe!");
 console.log("Player X goes first. Please enter a row and column between 0 and 2.");
-makeMove(0,2)
+makeMove(0, 2)
